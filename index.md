@@ -12,6 +12,7 @@ permalink: /valentine/
     --body-color: #f08080;   
     --flap-color: #cd5c5c;   
     --flap-edge: #b34a4a;
+    --wax-seal: #9e1b32; /* Deep Burgundy for a premium feel */
   }
 
   .site-header, .site-footer { display: none !important; }
@@ -28,7 +29,6 @@ permalink: /valentine/
     perspective: 2500px;
   }
 
-  /* Background Dimmer */
   #overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -71,14 +71,15 @@ permalink: /valentine/
     border-bottom: 2px solid var(--flap-edge);
   }
 
+  /* Improved Wax-Seal Style Button */
   #open-button {
     position: absolute;
     top: 130px;
     left: 207px;
     width: 70px;
     height: 70px;
-    background: radial-gradient(circle at 30% 30%, var(--flap-color), #b24d4d);
-    color: white;
+    background: radial-gradient(circle at 30% 30%, var(--wax-seal), #7a1224);
+    color: #ffd700; /* Gold text */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -86,9 +87,26 @@ permalink: /valentine/
     font-weight: bold;
     cursor: pointer;
     z-index: 6;
-    border: 3px solid #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: opacity 0.3s;
+    border: 2px solid #8a1428;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.2);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+  }
+
+  /* Hover Animation: Shake/Wiggle */
+  #open-button:hover {
+    transform: scale(1.1);
+    animation: wiggle 0.3s infinite;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  }
+
+  @keyframes wiggle {
+    0% { transform: scale(1.1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(3deg); }
+    75% { transform: scale(1.1) rotate(-3deg); }
+    100% { transform: scale(1.1) rotate(0deg); }
   }
 
   .envelope-label {
@@ -103,13 +121,16 @@ permalink: /valentine/
     transform: rotate(-5deg);
   }
 
+  /* Real Cardstock Texture */
   #valentine-container {
     position: absolute;
     top: 40px; 
     left: 42px; 
-    background: #fff;
-    background-image: linear-gradient(rgba(240,240,240,0.5) 1px, transparent 1px);
-    background-size: 100% 25px;
+    background: #fffcf5; /* Off-white cardstock color */
+    /* Grainy paper texture effect */
+    background-image: url("https://www.transparenttextures.com/patterns/felt.png"),
+                      linear-gradient(rgba(240,240,240,0.3) 1px, transparent 1px);
+    background-size: auto, 100% 25px;
     padding: 2rem;
     width: 400px;
     height: 250px;
@@ -120,10 +141,12 @@ permalink: /valentine/
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    border-radius: 2px;
+    border: 1px solid #e0ddd5;
     opacity: 0;
     visibility: hidden;
-    /* Smooth single-coordinate space transitions */
     transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
   .photo-frame {
@@ -131,33 +154,63 @@ permalink: /valentine/
     height: 100px;
     border: 6px solid #fff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    background: white;
   }
 
   h1.question-text { 
     font-family: 'Dancing Script', cursive; 
-    color: var(--flap-color); 
-    font-size: 1.8rem; 
+    color: var(--wax-seal); 
+    font-size: 1.8rem;
+    margin: 5px 0;
   }
 
-  .options-container { display: flex; gap: 40px; position: relative; width: 100%; justify-content: center; }
-  .check-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; color: #444; }
-  .box { width: 26px; height: 26px; border: 2px solid #555; background: white; }
-  #no-wrapper { position: absolute; left: 60%; transition: 0.1s ease; }
+  /* Centered Options Container */
+  .options-container { 
+    display: flex; 
+    gap: 60px; /* Wider gap for balance */
+    position: relative; 
+    width: 100%; 
+    justify-content: center; /* Horizontally centered */
+    align-items: center;
+    margin-bottom: 10px;
+  }
 
-  /* Smooth Animation Steps */
+  .check-option { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    color: #444;
+    font-size: 1.1rem;
+  }
+
+  .box { 
+    width: 28px; 
+    height: 28px; 
+    border: 2.5px solid #555; 
+    background: white; 
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* No button wrapper stays centered but allows movement */
+  #no-wrapper { 
+    display: inline-block;
+    transition: 0.1s ease; 
+  }
+
   .open-flap .flap { transform: rotateX(180deg); z-index: 0; }
   .open-flap #valentine-container { opacity: 1; visibility: visible; }
   .open-flap #open-button { opacity: 0; pointer-events: none; }
   .open-flap .envelope-label { opacity: 0; transition: 0.4s; }
 
-  /* Pulling out - stays relative to envelope */
   .pull-out #valentine-container { transform: translateY(-280px); }
 
-  /* Centering - stays relative to envelope but scales to cover screen */
   .centered #valentine-container {
     z-index: 100;
     transform: translateY(-80px) scale(1.9);
-    box-shadow: 0 60px 140px rgba(0,0,0,0.5);
+    box-shadow: 5px 30px 100px rgba(0,0,0,0.3), inset 0 0 100px rgba(255,255,255,0.2);
   }
 
   .envelope-front {
@@ -190,6 +243,7 @@ permalink: /valentine/
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/l41JWZ59PzT2/giphy.gif" alt="Linh" style="width:100%; height:100%; object-fit:cover;">
       </div>
       <h1 class="question-text">Will you be my Valentine?</h1>
+      
       <div class="options-container">
         <div class="check-option" onclick="celebrate()">
           <div class="box" id="yesBox"></div>
@@ -205,8 +259,8 @@ permalink: /valentine/
     </div>
 
     <div id="success-section">
-        <h1 style="font-family: 'Dancing Script', cursive; color: var(--flap-color); font-size: 2.2rem; margin:0;">YAY! 🥰</h1>
-        <p style="font-weight: bold; color: #555; margin: 10px 0;">See you soon, Linh!</p>
+        <h1 style="font-family: 'Dancing Script', cursive; color: var(--wax-seal); font-size: 2.2rem; margin:0;">YAY! 🥰</h1>
+        <p style="font-weight: bold; color: #555; margin: 10px 0;">Check yes! See you soon, Linh!</p>
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="120">
     </div>
   </div>
@@ -218,24 +272,21 @@ permalink: /valentine/
   function startSequence() {
     const env = document.getElementById('envelope');
     const body = document.body;
-    
     env.classList.add('open-flap');
-    
     setTimeout(() => {
       env.classList.add('pull-out');
-      
       setTimeout(() => {
         env.classList.remove('pull-out');
         env.classList.add('centered');
-        body.classList.add('centered-view'); // Dims the background
+        body.classList.add('centered-view');
       }, 1000);
     }, 800);
   }
 
   function moveNo() {
     const btn = document.getElementById('no-wrapper');
-    const x = Math.random() * 200 - 100;
-    const y = Math.random() * 100 - 50;
+    const x = Math.random() * 160 - 80;
+    const y = Math.random() * 80 - 40;
     btn.style.transform = `translate(${x}px, ${y}px)`;
   }
 
