@@ -258,9 +258,9 @@ permalink: /valentine/
   <div id="valentine-container">
     <div id="question-section" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:space-between; align-items:center;">
       <div class="photo-frame">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/l41JWZ59PzT2/giphy.gif" alt="Linh" style="width:100%; height:100%; object-fit:cover;">
+        <img src="assets/image.png" alt="Linh" style="width:100%; height:100%; object-fit:cover;">
       </div>
-      <h1 class="question-text">Will you be my Valentine?</h1>
+      <h1 class="question-text">Linh, will you be my Valentine?</h1>
       
       <div class="options-container">
         <div class="check-option" onclick="celebrate()">
@@ -278,7 +278,7 @@ permalink: /valentine/
 
     <div id="success-section">
         <h1 style="font-family: 'Dancing Script', cursive; color: var(--wax-seal); font-size: 2.2rem; margin:0;">YAY! 🥰</h1>
-        <p style="font-weight: bold; color: #555; margin: 10px 0;">Check yes! See you soon, Linh!</p>
+        <p style="font-weight: bold; color: #555; margin: 10px 0;">I love you my pookie bear soulmate!! Always and forever!</p>
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="120">
     </div>
   </div>
