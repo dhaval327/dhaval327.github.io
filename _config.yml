@@ -1,2 +1,3 @@
-theme: minima # Or any theme you prefer
-remote_theme: pages-themes/cayman@v0.2.0 # A clean, responsive choice
+remote_theme: jekyll/minima
+plugins:
+  - jekyll-remote-theme

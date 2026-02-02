@@ -10,6 +10,30 @@ permalink: /valentine/
     --soft-white: #fff0f3;
   }
 
+  /* This targets the default Jekyll header/nav area */
+.site-header {
+  background-color: #fff0f3 !important;
+  border-top: 5px solid #ffafcc !important;
+  border-bottom: none !important;
+}
+
+.site-title, .site-title:visited {
+  color: #ff5c8a !important; /* Soft pink title */
+  font-weight: bold;
+}
+
+/* This hides the default footer if you want a cleaner look */
+.site-footer {
+  display: none;
+}
+
+/* If you are still using Cayman, this forcefully overrides the green hero section */
+.page-header {
+  background-color: #ffafcc !important;
+  background-image: linear-gradient(120deg, #ffafcc, #ffc8dd) !important;
+  color: white !important;
+}
+
   body {
     background: linear-gradient(135deg, var(--soft-white) 0%, var(--primary-pink) 100%);
     margin: 0;
@@ -83,3 +107,37 @@ permalink: /valentine/
     document.getElementById('success-section').style.display = 'block';
   }
 </script>
+
+<script>
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart-effect');
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+    heart.style.position = 'fixed';
+    heart.style.bottom = '-20px';
+    heart.style.fontSize = Math.random() * 10 + 20 + 'px';
+    heart.style.opacity = Math.random();
+    heart.style.zIndex = '-1';
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 5000);
+  }
+
+  // Create a heart every 300ms
+  setInterval(createHeart, 300);
+</script>
+
+<style>
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-110vh) rotate(360deg); }
+  }
+  .heart-effect {
+    animation: floatUp linear forwards;
+  }
+</style>
