@@ -15,7 +15,36 @@ permalink: /valentine/
 
   /* Theme Overrides */
   .site-header { background-color: var(--soft-white) !important; border-top: 5px solid var(--primary-pink) !important; border-bottom: none !important; }
-  /* Flap that fully covers the card area when closed */
+  .site-title, .site-title:visited { color: var(--dark-pink) !important; font-weight: bold; }
+  .site-footer { display: none; }
+  .page-header { background-color: var(--primary-pink) !important; background-image: linear-gradient(120deg, #ffafcc, #ffc8dd) !important; color: white !important; }
+
+  body {
+    background: linear-gradient(135deg, var(--soft-white) 0%, var(--primary-pink) 100%);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+  }
+
+  /* Envelope container: centered and responsive */
+  .envelope-wrapper {
+    position: relative;
+    width: 50vw; /* half of viewport width */
+    height: 30vh; /* 30% of viewport height */
+    max-width: 900px;
+    max-height: 600px;
+    background: var(--envelope-color);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+
+  /* Flap that fully covers the envelope area when closed */
   .envelope-wrapper::before {
     content: "";
     position: absolute;
@@ -28,69 +57,47 @@ permalink: /valentine/
     transform-origin: top center;
     transition: transform 0.5s 0.3s;
     backface-visibility: hidden;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
+
+  /* Opening State */
   .envelope-wrapper.open::before {
     transform: rotateX(-180deg);
     z-index: 0;
   }
 
-  /* When the envelope is opened we will center the card via a separate class
-     applied by JS so we can smoothly animate the transform into the viewport center. */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    cursor: pointer;
-  }
-
-  .envelope-wrapper::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    z-index: 2;
-    border-left: 150px solid transparent;
-    border-right: 150px solid transparent;
-    border-top: 100px solid var(--envelope-flap);
-    transform-origin: top;
-    transition: transform 0.8s 0.8s, z-index 0s 1s, width 0.5s 0.8s, left 0s 0s, top 0s 0s;
-  }
-
-  /* The Valentine Card */
-
-  /* Centering state applied after flap finishes opening */
-  #valentine-container.center {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(1.4);
-    width: 350px;
-    z-index: 6;
-  }
+  /* The Valentine Card inside the envelope; sized with percentages so it scales */
   #valentine-container {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 5%;
+    left: 10%;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(5px);
-    padding: 2rem;
-    border-radius: 15px;
+    padding: 1.5rem;
+    border-radius: 12px;
     box-shadow: 0 10px 30px rgba(255, 92, 138, 0.2);
     border: 2px solid white;
-    width: 280px;
+    width: 80%;
     z-index: 1;
-    transition: transform 0.8s 0.8s, z-index 0s 1s, width 0.5s 0.8s;
+    transition: transform 0.8s 0.8s, z-index 0s 1s, width 0.5s 0.8s, left 0s 0s, top 0s 0s;
     text-align: center;
     box-sizing: border-box;
   }
 
-  /* Opening State */
-  .envelope-wrapper.open::before {
-    transform: rotateX(180deg);
-    z-index: 0;
+  /* When the envelope is opened we center the card in the viewport via JS */
+  #valentine-container.center {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(60vw, 700px);
+    z-index: 6;
   }
 
   .envelope-wrapper.open #valentine-container {
-    transform: translateY(-180px) scale(1.4);
-    width: 350px;
+    /* small lift while flap animation runs; final centering is handled by the .center class */
+    transform: translateY(-10%);
     z-index: 5;
   }
 
