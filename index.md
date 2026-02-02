@@ -12,7 +12,8 @@ permalink: /valentine/
     --body-color: #f08080;   
     --flap-color: #cd5c5c;   
     --flap-edge: #b34a4a;
-    --wax-seal: #9e1b32; /* Deep Burgundy for a premium feel */
+    --wax-seal: #9e1b32; 
+    --tape-color: rgba(255, 175, 204, 0.5); /* Washi tape color */
   }
 
   .site-header, .site-footer { display: none !important; }
@@ -71,7 +72,16 @@ permalink: /valentine/
     border-bottom: 2px solid var(--flap-edge);
   }
 
-  /* Improved Wax-Seal Style Button */
+  /* Periodic Wiggle Animation */
+  @keyframes periodicWiggle {
+    0%, 85% { transform: scale(1) rotate(0deg); }
+    87% { transform: scale(1.05) rotate(3deg); }
+    89% { transform: scale(1.05) rotate(-3deg); }
+    91% { transform: scale(1.05) rotate(3deg); }
+    93% { transform: scale(1.05) rotate(-3deg); }
+    95% { transform: scale(1) rotate(0deg); }
+  }
+
   #open-button {
     position: absolute;
     top: 130px;
@@ -79,7 +89,7 @@ permalink: /valentine/
     width: 70px;
     height: 70px;
     background: radial-gradient(circle at 30% 30%, var(--wax-seal), #7a1224);
-    color: #ffd700; /* Gold text */
+    color: #ffd700;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -92,13 +102,12 @@ permalink: /valentine/
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    animation: periodicWiggle 4s infinite ease-in-out;
     transition: all 0.3s ease;
   }
 
-  /* Hover Animation: Shake/Wiggle */
   #open-button:hover {
-    transform: scale(1.1);
-    animation: wiggle 0.3s infinite;
+    animation: wiggle 0.3s infinite; /* Keeps your original hover wiggle */
     box-shadow: 0 8px 20px rgba(0,0,0,0.5);
   }
 
@@ -121,13 +130,11 @@ permalink: /valentine/
     transform: rotate(-5deg);
   }
 
-  /* Real Cardstock Texture */
   #valentine-container {
     position: absolute;
     top: 40px; 
     left: 42px; 
-    background: #fffcf5; /* Off-white cardstock color */
-    /* Grainy paper texture effect */
+    background: #fffcf5; 
     background-image: url("https://www.transparenttextures.com/patterns/felt.png"),
                       linear-gradient(rgba(240,240,240,0.3) 1px, transparent 1px);
     background-size: auto, 100% 25px;
@@ -149,13 +156,26 @@ permalink: /valentine/
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
+  /* Washi Tape Logic */
   .photo-frame {
+    position: relative;
     width: 120px;
     height: 100px;
     border: 6px solid #fff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     background: white;
   }
+
+  .photo-frame::before, .photo-frame::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 15px;
+    background: var(--tape-color);
+    z-index: 10;
+  }
+  .photo-frame::before { top: -8px; left: -15px; transform: rotate(-35deg); }
+  .photo-frame::after { top: -8px; right: -15px; transform: rotate(35deg); }
 
   h1.question-text { 
     font-family: 'Dancing Script', cursive; 
@@ -164,13 +184,12 @@ permalink: /valentine/
     margin: 5px 0;
   }
 
-  /* Centered Options Container */
   .options-container { 
     display: flex; 
-    gap: 60px; /* Wider gap for balance */
+    gap: 60px; 
     position: relative; 
     width: 100%; 
-    justify-content: center; /* Horizontally centered */
+    justify-content: center; 
     align-items: center;
     margin-bottom: 10px;
   }
@@ -194,7 +213,6 @@ permalink: /valentine/
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
   }
 
-  /* No button wrapper stays centered but allows movement */
   #no-wrapper { 
     display: inline-block;
     transition: 0.1s ease; 
@@ -269,6 +287,9 @@ permalink: /valentine/
 </div>
 
 <script>
+  // Restore ambient background hearts
+  setInterval(createHeart, 800);
+
   function startSequence() {
     const env = document.getElementById('envelope');
     const body = document.body;
@@ -295,6 +316,22 @@ permalink: /valentine/
     box.style.background = '#4caf50';
     box.style.borderColor = '#4caf50';
     box.innerHTML = '<span style="color:white; position:absolute; top:-3px; left:4px; font-size:1.2rem;">✓</span>';
+    
+    // Confetti burst for the Yes button
+    for(let i=0; i<50; i++) {
+        setTimeout(() => {
+            const h = document.createElement('div');
+            h.classList.add('heart-effect');
+            h.innerHTML = ['❤️', '✨', '💖', '🌸'][Math.floor(Math.random() * 4)];
+            h.style.left = (40 + Math.random() * 20) + 'vw';
+            h.style.bottom = '50vh';
+            h.style.fontSize = (Math.random() * 15 + 10) + 'px';
+            h.style.animationDuration = (Math.random() * 1 + 1) + 's';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 1500);
+        }, i * 20);
+    }
+
     setTimeout(() => {
         document.getElementById('question-section').style.display = 'none';
         document.getElementById('success-section').style.display = 'block';
