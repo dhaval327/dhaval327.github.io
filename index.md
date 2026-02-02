@@ -28,6 +28,17 @@ permalink: /valentine/
     perspective: 2500px;
   }
 
+  /* Background Dimmer */
+  #overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0);
+    transition: background 1s ease;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .centered-view #overlay { background: rgba(0,0,0,0.4); }
+
   .envelope-wrapper {
     position: relative;
     width: 484px;
@@ -45,7 +56,6 @@ permalink: /valentine/
     z-index: 1;
   }
 
-  /* Improved Flap: Reduced vertical sides for a sharper triangular look */
   .flap {
     position: absolute;
     top: 0;
@@ -53,12 +63,10 @@ permalink: /valentine/
     width: 100%;
     height: 100%;
     background: var(--flap-color);
-    /* 5% vertical side creates the sharp triangle transition */
     clip-path: polygon(0 0, 100% 0, 100% 5%, 50% 55%, 0 5%);
     transform-origin: top;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s 0.8s;
     z-index: 5;
-    /* Chiseled shading on the flap edge */
     filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2));
     border-bottom: 2px solid var(--flap-edge);
   }
@@ -79,11 +87,9 @@ permalink: /valentine/
     cursor: pointer;
     z-index: 6;
     border: 3px solid #fff;
-    font-size: 0.8rem;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: 0.3s;
+    transition: opacity 0.3s;
   }
-  #open-button:hover { transform: scale(1.1); background: #d90429; }
 
   .envelope-label {
     position: absolute;
@@ -97,7 +103,6 @@ permalink: /valentine/
     transform: rotate(-5deg);
   }
 
-  /* Card Logic */
   #valentine-container {
     position: absolute;
     top: 40px; 
@@ -117,8 +122,8 @@ permalink: /valentine/
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    /* Transition to handle centering */
-    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s, top 1.2s, left 1.2s;
+    /* Smooth single-coordinate space transitions */
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
   }
 
   .photo-frame {
@@ -139,24 +144,20 @@ permalink: /valentine/
   .box { width: 26px; height: 26px; border: 2px solid #555; background: white; }
   #no-wrapper { position: absolute; left: 60%; transition: 0.1s ease; }
 
-  /* Animation Stages */
+  /* Smooth Animation Steps */
   .open-flap .flap { transform: rotateX(180deg); z-index: 0; }
   .open-flap #valentine-container { opacity: 1; visibility: visible; }
-  .open-flap #open-button { display: none; }
+  .open-flap #open-button { opacity: 0; pointer-events: none; }
   .open-flap .envelope-label { opacity: 0; transition: 0.4s; }
 
-  /* Step 1: Slide Out */
+  /* Pulling out - stays relative to envelope */
   .pull-out #valentine-container { transform: translateY(-280px); }
 
-  /* Step 2: Exact Screen Centering */
+  /* Centering - stays relative to envelope but scales to cover screen */
   .centered #valentine-container {
     z-index: 100;
-    position: fixed; /* Switch to fixed to ignore envelope container */
-    top: 50%;
-    left: 50%;
-    /* Standard trick for perfect centering: Translate -50% of itself */
-    transform: translate(-50%, -50%) scale(1.8);
-    box-shadow: 0 60px 140px rgba(0,0,0,0.4);
+    transform: translateY(-80px) scale(1.9);
+    box-shadow: 0 60px 140px rgba(0,0,0,0.5);
   }
 
   .envelope-front {
@@ -166,15 +167,16 @@ permalink: /valentine/
     width: 100%;
     height: 100%;
     background: linear-gradient(to top, var(--body-color) 60%, #f49797 95%, #ffbaba 100%);
-    /* Pocket matches the 5% shoulder height of the flap */
     clip-path: polygon(0 5%, 50% 55%, 100% 5%, 100% 100%, 0 100%);
     z-index: 3;
   }
 
   #success-section { display: none; }
-  .heart-effect { position: fixed; bottom: -20px; animation: floatUp linear forwards; z-index: -1; }
+  .heart-effect { position: fixed; bottom: -20px; animation: floatUp linear forwards; z-index: 101; }
   @keyframes floatUp { to { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
 </style>
+
+<div id="overlay"></div>
 
 <div class="envelope-wrapper" id="envelope">
   <div class="envelope-back"></div>
@@ -215,13 +217,18 @@ permalink: /valentine/
 <script>
   function startSequence() {
     const env = document.getElementById('envelope');
+    const body = document.body;
+    
     env.classList.add('open-flap');
+    
     setTimeout(() => {
       env.classList.add('pull-out');
+      
       setTimeout(() => {
         env.classList.remove('pull-out');
         env.classList.add('centered');
-      }, 1100);
+        body.classList.add('centered-view'); // Dims the background
+      }, 1000);
     }, 800);
   }
 
