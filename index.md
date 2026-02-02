@@ -9,8 +9,8 @@ permalink: /valentine/
 
   :root {
     --soft-white: #fff0f3;
-    --body-color: #f08080;   /* Lighter Pink/Coral */
-    --flap-color: #cd5c5c;   /* Darker Pink/Red */
+    --body-color: #f08080;   /* Light Pink/Coral */
+    --flap-color: #cd5c5c;   /* Dark Pink/Red */
   }
 
   .site-header, .site-footer { display: none !important; }
@@ -33,21 +33,21 @@ permalink: /valentine/
     width: 484px;
     height: 315px;
     z-index: 1;
-    border-radius: 20px; /* Unified rounded corners */
   }
 
-  /* Back of Envelope */
+  /* Back Wall */
   .envelope-back {
     position: absolute;
     width: 100%;
     height: 100%;
     background: var(--body-color);
-    border-radius: 20px;
+    border-radius: 15px;
     box-shadow: 0 30px 60px rgba(0,0,0,0.2);
     z-index: 1;
   }
 
-  /* The Flap - Using clip-path to match rounded corners */
+  /* Pentagonal Flap */
+  /* This starts at the top and covers exactly the top half in a V-shape */
   .flap {
     position: absolute;
     top: 0;
@@ -55,20 +55,26 @@ permalink: /valentine/
     width: 100%;
     height: 100%;
     background: var(--flap-color);
-    /* Creates the triangular flap shape */
-    clip-path: polygon(0 0, 100% 0, 50% 55%);
-    border-radius: 20px;
+    /* Pentagonal shape when closed: top-left, top-right, point-center */
+    clip-path: polygon(0 0, 100% 0, 100% 15%, 50% 55%, 0 15%);
+    border-radius: 15px;
     transform-origin: top;
-    transition: transform 0.8s ease-in-out, z-index 0.1s 0.8s;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s 0.8s;
     z-index: 5;
-    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.15));
   }
 
-  /* Open Button with Pulse */
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+  /* Front Pocket - The exact inverse of the flap's area */
+  .envelope-front {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* This polygon covers everything the flap does NOT cover */
+    clip-path: polygon(0 15%, 50% 55%, 100% 15%, 100% 100%, 0 100%);
+    background: linear-gradient(to top, var(--body-color) 70%, #f49797 100%);
+    z-index: 3;
+    border-radius: 15px;
   }
 
   #open-button {
@@ -87,8 +93,7 @@ permalink: /valentine/
     cursor: pointer;
     z-index: 6;
     border: 3px solid #fff;
-    font-size: 0.8rem;
-    animation: pulse 2s infinite ease-in-out;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     transition: 0.3s;
   }
 
@@ -104,10 +109,10 @@ permalink: /valentine/
     transform: rotate(-5deg);
   }
 
-  /* The Card */
+  /* Card */
   #valentine-container {
     position: absolute;
-    top: 30px; 
+    top: 40px; 
     left: 42px; 
     background: #fff;
     background-image: radial-gradient(#f0f0f0 1.5px, transparent 0);
@@ -144,7 +149,6 @@ permalink: /valentine/
     margin: 10px 0;
   }
 
-  /* Checkbox Styles */
   .options-container { display: flex; gap: 40px; margin-bottom: 15px; position: relative; width: 100%; justify-content: center; }
   .check-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; color: #444; font-size: 1.1rem; }
   .box { width: 26px; height: 26px; border: 2px solid #555; background: white; position: relative; }
@@ -161,19 +165,6 @@ permalink: /valentine/
     z-index: 10;
     transform: translateY(60px) scale(1.6);
     box-shadow: 0 50px 120px rgba(0,0,0,0.3);
-  }
-
-  /* Front Pocket - Consists of Body Color with Gradient Shading */
-  .envelope-front {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, var(--body-color) 60%, #f49797 100%);
-    clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%, 0 40%, 50% 85%, 0 40%);
-    z-index: 3;
-    border-radius: 20px;
   }
 
   #success-section { display: none; }
