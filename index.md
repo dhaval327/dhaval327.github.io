@@ -258,9 +258,9 @@ permalink: /valentine/
   <div id="valentine-container">
     <div id="question-section" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:space-between; align-items:center;">
       <div class="photo-frame">
-        <img src="assets/image.png" alt="Linh" style="width:100%; height:100%; object-fit:cover;">
+        <img src="image.png" alt="Linh" style="width:100%; height:100%; object-fit:cover;">
       </div>
-      <h1 class="question-text">Linh, will you be my Valentine?</h1>
+      <h1 class="question-text">Will you be my Valentine?</h1>
       
       <div class="options-container">
         <div class="check-option" onclick="celebrate()">
