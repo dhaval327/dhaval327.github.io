@@ -14,10 +14,7 @@ permalink: /valentine/
   }
 
   /* Theme Overrides */
-  .site-header { background-color: var(--soft-white) !important; border-top: 5px solid var(--primary-pink) !important; border-bottom: none !important; }
-  .site-title, .site-title:visited { color: var(--dark-pink) !important; font-weight: bold; }
-  .site-footer { display: none; }
-  .page-header { background-color: var(--primary-pink) !important; background-image: linear-gradient(120deg, #ffafcc, #ffc8dd) !important; color: white !important; }
+  .site-header, .site-footer { display: none !important; }
 
   body {
     background: linear-gradient(135deg, var(--soft-white) 0%, var(--primary-pink) 100%);
@@ -28,19 +25,10 @@ permalink: /valentine/
     justify-content: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
+    perspective: 1000px; /* Essential for 3D flip effect */
   }
 
-  /* The Container for the whole interaction */
-  .valentine-stage {
-    position: relative;
-    width: 350px;
-    height: 250px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* The Envelope Body */
+  /* The Envelope Container */
   .envelope {
     position: relative;
     width: 300px;
@@ -49,13 +37,13 @@ permalink: /valentine/
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    z-index: 2;
   }
 
-  /* The Flap: A triangle made with borders */
+  /* The Flap: Perfected Triangle */
   .flap {
     position: absolute;
     top: 0;
+    left: 0;
     width: 0;
     height: 0;
     border-left: 150px solid transparent;
@@ -63,45 +51,53 @@ permalink: /valentine/
     border-top: 100px solid var(--envelope-flap);
     transform-origin: top;
     transition: transform 0.6s ease-in-out;
-    z-index: 4; /* Sits above everything initially */
+    z-index: 4;
   }
 
-  /* The Front: This hides the card while it's "inside" */
+  /* Front Pocket: Created using an overlay to avoid 'bottom flap' glitch */
   .envelope-front {
     position: absolute;
     bottom: 0;
-    width: 0;
-    height: 0;
-    border-left: 150px solid transparent;
-    border-right: 150px solid transparent;
-    border-bottom: 100px solid #f29090; /* Slightly lighter shade for depth */
+    left: 0;
+    width: 300px;
+    height: 100px;
+    background: #f29090; 
+    clip-path: polygon(0 100%, 100% 100%, 50% 0%); /* Triangle pointing up */
     z-index: 3;
+  }
+  
+  /* Background pocket fill */
+  .envelope-back {
+    position: absolute;
+    bottom: 0;
+    width: 300px;
+    height: 200px;
+    background: var(--envelope-color);
+    z-index: 2;
   }
 
   /* The Card */
   #valentine-container {
     position: absolute;
     bottom: 10px;
+    left: 15px;
     background: white;
-    padding: 1.5rem;
-    border-radius: 10px;
+    padding: 1rem;
+    border-radius: 8px;
     width: 270px;
-    height: 180px;
+    height: 170px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    z-index: 1; /* Behind the front pocket and flap */
-    transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1; /* Tucked inside */
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
   }
 
-  /* Animation States */
+  /* Animation Logic */
   .open .flap {
     transform: rotateX(180deg);
-    z-index: 0; /* Move behind card after opening */
   }
 
   .extracted #valentine-container {
@@ -115,33 +111,31 @@ permalink: /valentine/
     box-shadow: 0 20px 50px rgba(0,0,0,0.2);
   }
 
-  h1 { color: var(--dark-pink); font-size: 1.2rem; margin: 10px 0; line-height: 1.2; }
+  h1 { color: var(--dark-pink); font-size: 1.3rem; margin: 10px 0; }
   
-  /* Buttons Styling */
   .buttons { margin-top: 15px; position: relative; width: 100%; height: 50px; }
   #yesButton { background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; }
   #noButton { 
     background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 8px; 
-    position: absolute; left: 55%; transition: 0.2s ease;
+    position: absolute; left: 55%; transition: 0.1s ease;
   }
 
-  /* Heart Animation */
+  /* Floating Hearts */
   @keyframes floatUp {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
   }
   .heart-effect { position: fixed; bottom: -20px; animation: floatUp linear forwards; z-index: -1; }
 </style>
 
-<div class="valentine-stage" id="stage">
+<div class="envelope" id="envelope-wrapper">
   <div class="flap"></div>
-  <div class="envelope"></div>
+  <div class="envelope-back"></div>
   <div class="envelope-front"></div>
   
   <div id="valentine-container">
     <div id="question-section">
       <h1>Will you be my Valentine? ❤️</h1>
-      <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/l41JWZ59PzT2/giphy.gif" width="120" alt="Cute gif">
+      <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/l41JWZ59PzT2/giphy.gif" width="100" alt="Cute gif">
       <div class="buttons">
         <button id="yesButton" onclick="celebrate()">Yes!</button>
         <button id="noButton" onmouseover="moveButton()">No</button>
@@ -150,7 +144,7 @@ permalink: /valentine/
 
     <div id="success-section" style="display: none;">
       <h1>YAY! 🥰</h1>
-      <p style="color: var(--dark-pink); margin: 5px 0;">See you on the 14th!</p>
+      <p style="color: var(--dark-pink);">See you on the 14th!</p>
       <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="120">
     </div>
   </div>
@@ -158,31 +152,32 @@ permalink: /valentine/
 
 <script>
   window.onload = () => {
-    const stage = document.getElementById('stage');
+    const envelope = document.getElementById('envelope-wrapper');
     
-    // Step 1: Open Flap
+    // Open Flap
     setTimeout(() => {
-      stage.classList.add('open');
+      envelope.classList.add('open');
       
-      // Step 2: Extract and Center Card
+      // Pull out card
       setTimeout(() => {
-        stage.classList.add('extracted');
+        envelope.classList.add('extracted');
       }, 1000);
     }, 1000);
   };
 
   function moveButton() {
     const btn = document.getElementById('noButton');
-    const x = Math.random() * 120 - 60;
-    const y = Math.random() * 80 - 40;
+    // Keep movement constrained to the enlarged card area
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 100 - 50;
     btn.style.transform = `translate(${x}px, ${y}px)`;
   }
 
   function celebrate() {
     document.getElementById('question-section').style.display = 'none';
     document.getElementById('success-section').style.display = 'block';
-    for(let i=0; i<20; i++) {
-        setTimeout(createHeart, i * 100);
+    for(let i=0; i<30; i++) {
+        setTimeout(createHeart, i * 50);
     }
   }
 
@@ -192,10 +187,10 @@ permalink: /valentine/
     heart.innerHTML = '❤️';
     heart.style.left = Math.random() * 100 + 'vw';
     heart.style.animationDuration = Math.random() * 2 + 3 + 's';
-    heart.style.fontSize = Math.random() * 10 + 20 + 'px';
+    heart.style.fontSize = Math.random() * 15 + 15 + 'px';
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
   }
 
-  setInterval(createHeart, 500);
+  setInterval(createHeart, 600);
 </script>
