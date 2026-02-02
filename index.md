@@ -15,29 +15,29 @@ permalink: /valentine/
 
   /* Theme Overrides */
   .site-header { background-color: var(--soft-white) !important; border-top: 5px solid var(--primary-pink) !important; border-bottom: none !important; }
-  .site-title, .site-title:visited { color: var(--dark-pink) !important; font-weight: bold; }
-  .site-footer { display: none; }
-  .page-header { background-color: var(--primary-pink) !important; background-image: linear-gradient(120deg, #ffafcc, #ffc8dd) !important; color: white !important; }
-
-  body {
-    background: linear-gradient(135deg, var(--soft-white) 0%, var(--primary-pink) 100%);
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Flap that fully covers the card area when closed */
+  .envelope-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--envelope-flap);
+    z-index: 3;
+    transform-origin: top center;
+    transition: transform 0.5s 0.3s;
+    backface-visibility: hidden;
+  }
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
+  .envelope-wrapper.open::before {
+    transform: rotateX(-180deg);
+    z-index: 0;
   }
 
-  /* Envelope Animation Styles */
-  .envelope-wrapper {
-    position: relative;
-    width: 300px;
-    height: 200px;
-    background: var(--envelope-color);
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+  /* When the envelope is opened we will center the card via a separate class
+     applied by JS so we can smoothly animate the transform into the viewport center. */
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     cursor: pointer;
   }
@@ -51,10 +51,20 @@ permalink: /valentine/
     border-right: 150px solid transparent;
     border-top: 100px solid var(--envelope-flap);
     transform-origin: top;
-    transition: transform 0.5s 0.3s;
+    transition: transform 0.8s 0.8s, z-index 0s 1s, width 0.5s 0.8s, left 0s 0s, top 0s 0s;
   }
 
   /* The Valentine Card */
+
+  /* Centering state applied after flap finishes opening */
+  #valentine-container.center {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1.4);
+    width: 350px;
+    z-index: 6;
+  }
   #valentine-container {
     position: absolute;
     bottom: 10px;
@@ -125,9 +135,16 @@ permalink: /valentine/
 
 <script>
   // Automatically open envelope after 1 second
+  // Automatically open envelope after 1 second, then center the card after flap opens
   window.onload = () => {
     setTimeout(() => {
-      document.getElementById('envelope').classList.add('open');
+      const envelope = document.getElementById('envelope');
+      const card = document.getElementById('valentine-container');
+      envelope.classList.add('open');
+      // After flap's transition (delay 0.3s + duration 0.5s = 0.8s) start centering animation
+      setTimeout(() => {
+        card.classList.add('center');
+      }, 800);
     }, 1000);
   };
 
