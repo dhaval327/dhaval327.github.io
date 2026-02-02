@@ -25,7 +25,7 @@ permalink: /valentine/
     justify-content: center;
     font-family: 'Segoe UI', sans-serif;
     overflow: hidden;
-    perspective: 1500px;
+    perspective: 2000px;
   }
 
   /* Envelope Assembly */
@@ -37,11 +37,9 @@ permalink: /valentine/
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     z-index: 1;
-    display: flex;
-    justify-content: center;
   }
 
-  /* The Flap: Covers everything initially */
+  /* Layer 4: The Flap */
   .flap {
     position: absolute;
     top: 0;
@@ -52,14 +50,14 @@ permalink: /valentine/
     border-right: 150px solid transparent;
     border-top: 110px solid var(--envelope-flap);
     transform-origin: top;
-    transition: transform 0.8s ease-in-out;
-    z-index: 5; 
+    transition: transform 0.8s ease-in-out, z-index 0.1s 0.8s;
+    z-index: 5; /* Starts on top */
   }
 
-  /* "Open" Button - The Seal */
+  /* The Seal */
   #open-button {
     position: absolute;
-    top: 80px;
+    top: 75px;
     left: 120px;
     width: 60px;
     height: 60px;
@@ -74,33 +72,31 @@ permalink: /valentine/
     z-index: 6;
     border: 3px solid white;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: 0.3s;
   }
 
-  /* The Card: Initially tucked deep */
+  /* Layer 2: The Card */
+  /* Width reduced to 250px so the 300px flap covers the "corners" completely */
   #valentine-container {
     position: absolute;
-    top: 20px; 
+    top: 30px; 
+    left: 25px; 
     background: white;
     padding: 1.5rem;
     border-radius: 8px;
-    width: 260px;
-    height: 170px;
+    width: 250px;
+    height: 160px;
     text-align: center;
-    z-index: 2; /* Sandwiched behind pocket and flap */
+    z-index: 2; /* Behind pocket (3) and flap (5) */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    
-    /* Animation settings */
-    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.6s;
-    transform: translateY(0) scale(0.9);
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Front Pocket */
+  /* Layer 3: Front Pocket */
   .envelope-front {
     position: absolute;
     bottom: 0;
@@ -108,41 +104,40 @@ permalink: /valentine/
     width: 300px;
     height: 200px;
     background-color: var(--pocket-color);
-    clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%, 0 40%, 50% 80%, 0 40%);
+    /* Lowered V to hide card perfectly */
+    clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%, 0 40%, 50% 85%, 0 40%);
     z-index: 3;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
   }
 
-  /* SEQUENCE CLASSES */
-  
-  /* 1. Flap Opens */
+  /* ANIMATION PHASES */
+
+  /* 1. Flap rotates and drops its z-index behind the card */
   .open-flap .flap {
     transform: rotateX(180deg);
+    z-index: 0; 
   }
   .open-flap #open-button { display: none; }
 
-  /* 2. Card pulls up out of pocket, then slides DOWN to center */
+  /* 2. Pull straight up */
   .pull-out #valentine-container {
-    /* TranslateY(-120px) pulls it out of the top, 
-       then the second part of the animation (via JS) will center it */
-    z-index: 10;
-    transform: translateY(-120px) scale(1);
+    transform: translateY(-150px);
   }
 
+  /* 3. Drop down and center */
   .centered #valentine-container {
     z-index: 10;
-    /* Centers based on viewport, scale up for effect */
-    transform: translateY(20px) scale(2); 
+    /* TranslateX(0) ensures horizontal center relative to parent */
+    transform: translateY(20px) scale(2.2); 
   }
 
-  /* Card Content Styles */
-  h1 { color: var(--dark-pink); font-size: 1rem; margin: 5px 0; }
-  .buttons { position: relative; margin-top: 10px; width: 100%; height: 40px; }
+  h1 { color: var(--dark-pink); font-size: 1rem; margin-bottom: 10px; }
+  .buttons { position: relative; height: 40px; margin-top: 10px; width: 100%; }
   #yesButton { background: #4caf50; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
   #noButton { 
     background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 5px; 
-    position: absolute; left: 55%; transition: 0.1s ease;
+    position: absolute; left: 55%; transition: 0.1s;
   }
 
   #success-section { display: none; }
@@ -177,24 +172,24 @@ permalink: /valentine/
   function startSequence() {
     const env = document.getElementById('envelope');
     
-    // 1. Open flap
+    // Phase 1: Flip flap
     env.classList.add('open-flap');
     
-    // 2. Pull card UP out of the pocket
+    // Phase 2: Pull out (upward)
     setTimeout(() => {
       env.classList.add('pull-out');
       
-      // 3. Move card DOWN and CENTER it
+      // Phase 3: Center (down and forward)
       setTimeout(() => {
         env.classList.remove('pull-out');
         env.classList.add('centered');
-      }, 1000);
+      }, 1100);
     }, 800);
   }
 
   function moveButton() {
     const btn = document.getElementById('noButton');
-    const x = Math.random() * 100 - 50;
+    const x = Math.random() * 80 - 40;
     const y = Math.random() * 60 - 30;
     btn.style.transform = `translate(${x}px, ${y}px)`;
   }
