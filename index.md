@@ -30,75 +30,69 @@ permalink: /valentine/
     overflow: hidden;
   }
 
-  /* Envelope container: centered and responsive */
+  /* Envelope container: appropriately sized like a real envelope */
   .envelope-wrapper {
     position: relative;
-    width: 50vw; /* half of viewport width */
-    height: 30vh; /* 30% of viewport height */
-    max-width: 900px;
-    max-height: 600px;
+    width: 35vw; /* envelope width */
+    height: 22vh; /* envelope height */
+    max-width: 500px;
+    max-height: 350px;
     background: var(--envelope-color);
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     cursor: pointer;
+    overflow: hidden;
   }
 
-  /* Flap that fully covers the envelope area when closed */
+  /* Triangular flap that covers the envelope opening */
   .envelope-wrapper::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--envelope-flap);
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 50% solid transparent;
+    border-right: 50% solid transparent;
+    border-top: 11vh solid var(--envelope-flap);
     z-index: 3;
     transform-origin: top center;
-    transition: transform 0.5s 0.3s;
-    backface-visibility: hidden;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    transition: transform 0.6s 0.4s;
   }
 
-  /* Opening State */
+  /* Opening State: triangular flap rotates upward to reveal card */
   .envelope-wrapper.open::before {
-    transform: rotateX(-180deg);
+    transform: translateX(-50%) rotateX(-180deg);
     z-index: 0;
   }
 
-  /* The Valentine Card inside the envelope; sized with percentages so it scales */
+  /* The Valentine Card: starts inside the envelope, then extracts and enlarges */
   #valentine-container {
     position: absolute;
-    bottom: 5%;
+    bottom: 8%;
     left: 10%;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(5px);
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(255, 92, 138, 0.2);
+    padding: 1.2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(255, 92, 138, 0.2);
     border: 2px solid white;
     width: 80%;
     z-index: 1;
-    transition: transform 0.8s 0.8s, z-index 0s 1s, width 0.5s 0.8s, left 0s 0s, top 0s 0s;
+    transition: all 1.2s 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
     text-align: center;
     box-sizing: border-box;
   }
 
-  /* When the envelope is opened we center the card in the viewport via JS */
+  /* When the card is extracted and enlarged to center screen */
   #valentine-container.center {
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-    width: min(60vw, 700px);
+    transform: translate(-50%, -50%) scale(2.2);
+    width: min(55vw, 650px);
     z-index: 6;
-  }
-
-  .envelope-wrapper.open #valentine-container {
-    /* small lift while flap animation runs; final centering is handled by the .center class */
-    transform: translateY(-10%);
-    z-index: 5;
   }
 
   h1 { color: var(--dark-pink); font-size: 1.5rem; margin-bottom: 15px; }
