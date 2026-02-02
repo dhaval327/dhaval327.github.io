@@ -9,9 +9,9 @@ permalink: /valentine/
 
   :root {
     --soft-white: #fff0f3;
-    --body-color: #f08080;   /* Light Pink/Coral */
-    --flap-color: #cd5c5c;   /* Dark Pink/Red */
-    --shadow-deep: rgba(0, 0, 0, 0.25);
+    --body-color: #f08080;   
+    --flap-color: #cd5c5c;   
+    --flap-edge: #b34a4a;
   }
 
   .site-header, .site-footer { display: none !important; }
@@ -28,17 +28,15 @@ permalink: /valentine/
     perspective: 2500px;
   }
 
-  /* Main Envelope Assembly - Sharp Edges */
   .envelope-wrapper {
     position: relative;
     width: 484px;
     height: 315px;
     z-index: 1;
     background: var(--body-color);
-    box-shadow: 0 40px 80px var(--shadow-deep);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.25);
   }
 
-  /* The Back Panel with subtle edge shading */
   .envelope-back {
     position: absolute;
     width: 100%;
@@ -47,7 +45,7 @@ permalink: /valentine/
     z-index: 1;
   }
 
-  /* Pentagonal Flap with Realistic Depth */
+  /* Improved Flap: Reduced vertical sides for a sharper triangular look */
   .flap {
     position: absolute;
     top: 0;
@@ -55,21 +53,14 @@ permalink: /valentine/
     width: 100%;
     height: 100%;
     background: var(--flap-color);
-    /* Pentagonal shape: top-left, top-right, point-center */
-    clip-path: polygon(0 0, 100% 0, 100% 15%, 50% 55%, 0 15%);
+    /* 5% vertical side creates the sharp triangle transition */
+    clip-path: polygon(0 0, 100% 0, 100% 5%, 50% 55%, 0 5%);
     transform-origin: top;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s 0.8s;
     z-index: 5;
-    /* This creates the realistic shadow under the flap point */
-    filter: drop-shadow(0 8px 6px rgba(0,0,0,0.2));
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-
-  /* Open Button with Pulse */
-  @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    50% { transform: scale(1.08); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    /* Chiseled shading on the flap edge */
+    filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2));
+    border-bottom: 2px solid var(--flap-edge);
   }
 
   #open-button {
@@ -89,11 +80,10 @@ permalink: /valentine/
     z-index: 6;
     border: 3px solid #fff;
     font-size: 0.8rem;
-    animation: pulse 2s infinite ease-in-out;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     transition: 0.3s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
   }
+  #open-button:hover { transform: scale(1.1); background: #d90429; }
 
   .envelope-label {
     position: absolute;
@@ -105,17 +95,16 @@ permalink: /valentine/
     z-index: 4;
     pointer-events: none;
     transform: rotate(-5deg);
-    text-shadow: 2px 4px 6px rgba(0,0,0,0.1);
   }
 
-  /* Realistic Card */
+  /* Card Logic */
   #valentine-container {
     position: absolute;
     top: 40px; 
     left: 42px; 
     background: #fff;
     background-image: linear-gradient(rgba(240,240,240,0.5) 1px, transparent 1px);
-    background-size: 100% 25px; /* Lined paper look */
+    background-size: 100% 25px;
     padding: 2rem;
     width: 400px;
     height: 250px;
@@ -126,18 +115,16 @@ permalink: /valentine/
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
     opacity: 0;
     visibility: hidden;
-    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+    /* Transition to handle centering */
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s, top 1.2s, left 1.2s;
   }
 
   .photo-frame {
     width: 120px;
     height: 100px;
     border: 6px solid #fff;
-    background: #fafafa;
-    transform: rotate(-2deg);
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
 
@@ -145,40 +132,43 @@ permalink: /valentine/
     font-family: 'Dancing Script', cursive; 
     color: var(--flap-color); 
     font-size: 1.8rem; 
-    margin: 5px 0;
   }
 
-  .options-container { display: flex; gap: 40px; margin-bottom: 15px; position: relative; width: 100%; justify-content: center; }
-  .check-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; color: #444; font-size: 1.1rem; }
-  .box { width: 26px; height: 26px; border: 2px solid #555; background: white; transition: 0.2s; }
-
+  .options-container { display: flex; gap: 40px; position: relative; width: 100%; justify-content: center; }
+  .check-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; color: #444; }
+  .box { width: 26px; height: 26px; border: 2px solid #555; background: white; }
   #no-wrapper { position: absolute; left: 60%; transition: 0.1s ease; }
 
-  /* States */
-  .open-flap .flap { transform: rotateX(180deg); z-index: 0; filter: none; }
+  /* Animation Stages */
+  .open-flap .flap { transform: rotateX(180deg); z-index: 0; }
   .open-flap #valentine-container { opacity: 1; visibility: visible; }
-  .open-flap #open-button { opacity: 0; pointer-events: none; }
+  .open-flap #open-button { display: none; }
   .open-flap .envelope-label { opacity: 0; transition: 0.4s; }
 
+  /* Step 1: Slide Out */
   .pull-out #valentine-container { transform: translateY(-280px); }
+
+  /* Step 2: Exact Screen Centering */
   .centered #valentine-container {
-    z-index: 10;
-    transform: translateY(60px) scale(1.7);
+    z-index: 100;
+    position: fixed; /* Switch to fixed to ignore envelope container */
+    top: 50%;
+    left: 50%;
+    /* Standard trick for perfect centering: Translate -50% of itself */
+    transform: translate(-50%, -50%) scale(1.8);
     box-shadow: 0 60px 140px rgba(0,0,0,0.4);
   }
 
-  /* Front Pocket - Sharp Inverse Pentagonal */
   .envelope-front {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Darker gradients at edges create the "pocket" depth */
     background: linear-gradient(to top, var(--body-color) 60%, #f49797 95%, #ffbaba 100%);
-    clip-path: polygon(0 15%, 50% 55%, 100% 15%, 100% 100%, 0 100%);
+    /* Pocket matches the 5% shoulder height of the flap */
+    clip-path: polygon(0 5%, 50% 55%, 100% 5%, 100% 100%, 0 100%);
     z-index: 3;
-    box-shadow: inset 0 -5px 15px rgba(0,0,0,0.05);
   }
 
   #success-section { display: none; }
@@ -214,7 +204,7 @@ permalink: /valentine/
 
     <div id="success-section">
         <h1 style="font-family: 'Dancing Script', cursive; color: var(--flap-color); font-size: 2.2rem; margin:0;">YAY! 🥰</h1>
-        <p style="font-weight: bold; color: #555; margin: 10px 0;">Check yes! See you soon, Linh!</p>
+        <p style="font-weight: bold; color: #555; margin: 10px 0;">See you soon, Linh!</p>
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="120">
     </div>
   </div>
