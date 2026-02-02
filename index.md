@@ -8,18 +8,15 @@ permalink: /valentine/
   @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Quicksand:wght@500&display=swap');
 
   :root {
-    --primary-pink: #ffafcc;
-    --dark-pink: #ff5c8a;
     --soft-white: #fff0f3;
-    --envelope-body: #f08080;   /* Light Coral */
-    --envelope-flap: #cd5c5c;   /* Indian Red */
-    --pocket-color: #f29090;    /* Slightly lighter than body */
+    --body-color: #f08080;   /* Lighter Pink/Coral */
+    --flap-color: #cd5c5c;   /* Darker Pink/Red */
   }
 
   .site-header, .site-footer { display: none !important; }
 
   body {
-    background: linear-gradient(135deg, var(--soft-white) 0%, var(--primary-pink) 100%);
+    background: linear-gradient(135deg, var(--soft-white) 0%, #ffafcc 100%);
     margin: 0;
     height: 100vh;
     display: flex;
@@ -30,46 +27,48 @@ permalink: /valentine/
     perspective: 2500px;
   }
 
-  /* Envelope Assembly - 484px (Another 10% larger) */
+  /* Main Envelope Assembly - 484px */
   .envelope-wrapper {
     position: relative;
     width: 484px;
     height: 315px;
     z-index: 1;
+    border-radius: 20px; /* Unified rounded corners */
   }
 
-  /* The Back Panel - Ensures the "shoulders" match the body color */
+  /* Back of Envelope */
   .envelope-back {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: var(--envelope-body);
-    border-radius: 12px;
+    background: var(--body-color);
+    border-radius: 20px;
     box-shadow: 0 30px 60px rgba(0,0,0,0.2);
     z-index: 1;
   }
 
-  /* The Flap */
+  /* The Flap - Using clip-path to match rounded corners */
   .flap {
     position: absolute;
     top: 0;
     left: 0;
-    width: 0;
-    height: 0;
-    border-left: 242px solid transparent;
-    border-right: 242px solid transparent;
-    border-top: 170px solid var(--envelope-flap);
+    width: 100%;
+    height: 100%;
+    background: var(--flap-color);
+    /* Creates the triangular flap shape */
+    clip-path: polygon(0 0, 100% 0, 50% 55%);
+    border-radius: 20px;
     transform-origin: top;
     transition: transform 0.8s ease-in-out, z-index 0.1s 0.8s;
     z-index: 5;
     filter: drop-shadow(0 5px 5px rgba(0,0,0,0.15));
   }
 
-  /* Pulse Hover Animation for Open Button */
+  /* Open Button with Pulse */
   @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    50% { transform: scale(1.1); box-shadow: 0 8px 25px rgba(217, 4, 41, 0.4); }
-    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
   }
 
   #open-button {
@@ -78,7 +77,7 @@ permalink: /valentine/
     left: 207px;
     width: 70px;
     height: 70px;
-    background: radial-gradient(circle, #ff4d6d 0%, #d90429 100%);
+    background: var(--flap-color);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -92,11 +91,6 @@ permalink: /valentine/
     animation: pulse 2s infinite ease-in-out;
     transition: 0.3s;
   }
-  #open-button:hover {
-    animation: none;
-    transform: scale(1.15) rotate(10deg);
-    background: #d90429;
-  }
 
   .envelope-label {
     position: absolute;
@@ -104,17 +98,16 @@ permalink: /valentine/
     left: 50px;
     font-family: 'Great Vibes', cursive;
     font-size: 3.2rem;
-    color: rgba(255, 255, 255, 0.95);
+    color: rgba(255, 255, 255, 0.9);
     z-index: 4;
     pointer-events: none;
     transform: rotate(-5deg);
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
   }
 
-  /* Card Styles */
+  /* The Card */
   #valentine-container {
     position: absolute;
-    top: 50px; 
+    top: 30px; 
     left: 42px; 
     background: #fff;
     background-image: radial-gradient(#f0f0f0 1.5px, transparent 0);
@@ -130,7 +123,6 @@ permalink: /valentine/
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #eee;
     opacity: 0;
     visibility: hidden;
     transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
@@ -144,11 +136,10 @@ permalink: /valentine/
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
-  .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
   h1.question-text { 
     font-family: 'Dancing Script', cursive; 
-    color: var(--dark-pink); 
+    color: var(--flap-color); 
     font-size: 1.8rem; 
     margin: 10px 0;
   }
@@ -157,32 +148,32 @@ permalink: /valentine/
   .options-container { display: flex; gap: 40px; margin-bottom: 15px; position: relative; width: 100%; justify-content: center; }
   .check-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; color: #444; font-size: 1.1rem; }
   .box { width: 26px; height: 26px; border: 2px solid #555; background: white; position: relative; }
-
   #no-wrapper { position: absolute; left: 60%; transition: 0.1s ease; }
 
-  /* Animation States */
+  /* States */
   .open-flap .flap { transform: rotateX(180deg); z-index: 0; }
   .open-flap #valentine-container { opacity: 1; visibility: visible; }
   .open-flap #open-button { display: none; }
-  .open-flap .envelope-label { opacity: 0; transition: opacity 0.5s; }
+  .open-flap .envelope-label { opacity: 0; }
+
   .pull-out #valentine-container { transform: translateY(-260px); }
   .centered #valentine-container {
     z-index: 10;
     transform: translateY(60px) scale(1.6);
-    box-shadow: 0 50px 120px rgba(0,0,0,0.35);
+    box-shadow: 0 50px 120px rgba(0,0,0,0.3);
   }
 
+  /* Front Pocket - Consists of Body Color with Gradient Shading */
   .envelope-front {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 484px;
-    height: 315px;
-    background: linear-gradient(to top, var(--pocket-color) 60%, #f7a3a3 100%);
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, var(--body-color) 60%, #f49797 100%);
     clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%, 0 40%, 50% 85%, 0 40%);
     z-index: 3;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    border-radius: 20px;
   }
 
   #success-section { display: none; }
@@ -201,15 +192,12 @@ permalink: /valentine/
       <div class="photo-frame">
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/l41JWZ59PzT2/giphy.gif" alt="Our Photo">
       </div>
-      
       <h1 class="question-text">Will you be my Valentine?</h1>
-      
       <div class="options-container">
         <div class="check-option" onclick="celebrate()">
           <div class="box" id="yesBox"></div>
           <span>Yes</span>
         </div>
-        
         <div id="no-wrapper">
           <div class="check-option" onmouseover="moveNo()">
             <div class="box"></div>
@@ -220,7 +208,7 @@ permalink: /valentine/
     </div>
 
     <div id="success-section">
-        <h1 style="font-family: 'Dancing Script', cursive; color: var(--dark-pink); font-size: 2.2rem; margin:0;">YAY! 🥰</h1>
+        <h1 style="font-family: 'Dancing Script', cursive; color: var(--flap-color); font-size: 2.2rem; margin:0;">YAY! 🥰</h1>
         <p style="font-weight: bold; color: #555; margin: 10px 0;">See you soon, Linh!</p>
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="120">
     </div>
@@ -252,9 +240,7 @@ permalink: /valentine/
   function celebrate() {
     const box = document.getElementById('yesBox');
     box.style.background = '#4caf50';
-    box.style.borderColor = '#4caf50';
     box.innerHTML = '<span style="color:white; position:absolute; top:-3px; left:4px; font-size:1.2rem;">✓</span>';
-    
     setTimeout(() => {
         document.getElementById('question-section').style.display = 'none';
         document.getElementById('success-section').style.display = 'block';
