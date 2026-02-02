@@ -3,6 +3,49 @@ layout: default
 title: A Special Question
 permalink: /valentine/
 ---
+<style>
+  :root {
+    --primary-pink: #ffafcc;
+    --dark-pink: #ff5c8a;
+    --soft-white: #fff0f3;
+  }
+
+  body {
+    background: linear-gradient(135deg, var(--soft-white) 0%, var(--primary-pink) 100%);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  #valentine-container {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 92, 138, 0.2);
+    border: 2px solid white;
+    max-width: 500px;
+    width: 90%;
+  }
+
+  h1 {
+    color: var(--dark-pink);
+    font-size: 2.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+  }
+
+  .buttons button {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .buttons button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+</style>
 
 <div id="valentine-container" style="text-align: center; margin-top: 50px; font-family: 'Arial', sans-serif;">
   <div id="question-section">
@@ -13,7 +56,7 @@ permalink: /valentine/
 
     <div class="buttons">
       <button id="yesButton" onclick="celebrate()" style="background-color: #4caf50; color: white; padding: 15px 32px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;">Yes!</button>
-      
+
       <button id="noButton" onmouseover="moveButton()" style="background-color: #f44336; color: white; padding: 15px 32px; font-size: 16px; border: none; border-radius: 8px; position: absolute; margin-left: 10px;">No</button>
     </div>
   </div>
@@ -30,7 +73,7 @@ permalink: /valentine/
     // Get random coordinates within the viewport
     const x = Math.random() * (window.innerWidth - btn.offsetWidth);
     const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-    
+
     btn.style.left = x + 'px';
     btn.style.top = y + 'px';
   }
