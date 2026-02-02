@@ -12,6 +12,7 @@ permalink: /valentine/
     --envelope-color: #f08080;
     --envelope-flap: #cd5c5c;
     --pocket-color: #f29090;
+    --shadow-color: rgba(0, 0, 0, 0.2);
   }
 
   .site-header, .site-footer { display: none !important; }
@@ -28,7 +29,7 @@ permalink: /valentine/
     perspective: 2000px;
   }
 
-  /* Envelope Assembly */
+  /* Main Envelope Assembly */
   .envelope-wrapper {
     position: relative;
     width: 300px;
@@ -37,11 +38,12 @@ permalink: /valentine/
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     z-index: 1;
-    /* This ensures nothing peeks out of the sides/bottom */
-    overflow: visible; 
+    /* Subtle outer border for definition */
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 15px 35px var(--shadow-color);
   }
 
-  /* Layer 4: The Flap */
+  /* Realistic Flap with Shading */
   .flap {
     position: absolute;
     top: 0;
@@ -50,20 +52,22 @@ permalink: /valentine/
     height: 0;
     border-left: 150px solid transparent;
     border-right: 150px solid transparent;
-    border-top: 112px solid var(--envelope-flap); /* Increased slightly for overlap */
+    border-top: 115px solid var(--envelope-flap);
     transform-origin: top;
     transition: transform 0.8s ease-in-out, z-index 0.1s 0.8s;
-    z-index: 5; 
+    z-index: 5;
+    /* Creates a shadow under the flap point */
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
   }
 
-  /* The Seal */
+  /* The Seal / Open Button */
   #open-button {
     position: absolute;
-    top: 75px;
+    top: 80px;
     left: 120px;
     width: 60px;
     height: 60px;
-    background: #ff4d6d;
+    background: radial-gradient(circle, #ff4d6d 0%, #d90429 100%);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -72,11 +76,16 @@ permalink: /valentine/
     font-weight: bold;
     cursor: pointer;
     z-index: 6;
-    border: 3px solid white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border: 3px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
   }
+  #open-button:hover { transform: scale(1.1) rotate(5deg); }
 
-  /* Layer 2: The Card */
+  /* The Card */
   #valentine-container {
     position: absolute;
     top: 30px; 
@@ -93,59 +102,48 @@ permalink: /valentine/
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    
-    /* FIX: Keep invisible until open */
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.1);
     opacity: 0;
     visibility: hidden;
-    
     transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
   }
 
-  /* Layer 3: Front Pocket */
+  /* Front Pocket with Shading */
   .envelope-front {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 300px;
     height: 200px;
-    background-color: var(--pocket-color);
+    /* Gradient gives the "V" a 3D pocket feel */
+    background: linear-gradient(to top, var(--pocket-color) 60%, #f7a3a3 100%);
     clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%, 0 40%, 50% 85%, 0 40%);
     z-index: 3;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.05);
   }
 
-  /* ANIMATION PHASES */
+  /* Sequence Actions */
+  .open-flap .flap { transform: rotateX(180deg); z-index: 0; }
+  .open-flap #valentine-container { opacity: 1; visibility: visible; }
+  .open-flap #open-button { opacity: 0; pointer-events: none; }
 
-  .open-flap .flap {
-    transform: rotateX(180deg);
-    z-index: 0; 
-  }
-  
-  /* Reveal card the moment the flap starts moving */
-  .open-flap #valentine-container {
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .open-flap #open-button { display: none; }
-
-  .pull-out #valentine-container {
-    transform: translateY(-150px);
-  }
+  .pull-out #valentine-container { transform: translateY(-150px); }
 
   .centered #valentine-container {
     z-index: 10;
     transform: translateY(20px) scale(2.2); 
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
   }
 
-  h1 { color: var(--dark-pink); font-size: 1rem; margin-bottom: 10px; }
+  /* Content Styling */
+  h1 { color: var(--dark-pink); font-size: 1rem; margin-bottom: 10px; font-weight: 800; }
   .buttons { position: relative; height: 40px; margin-top: 10px; width: 100%; }
-  #yesButton { background: #4caf50; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+  #yesButton { background: #4caf50; color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
   #noButton { 
-    background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 5px; 
-    position: absolute; left: 55%; transition: 0.1s;
+    background: #f44336; color: white; border: none; padding: 8px 20px; border-radius: 20px; 
+    position: absolute; left: 55%; transition: 0.1s; font-weight: bold;
   }
 
   #success-section { display: none; }
@@ -169,6 +167,7 @@ permalink: /valentine/
 
     <div id="success-section">
       <h1>YAY! 🥰</h1>
+      <p style="color:var(--dark-pink); font-size:0.8rem;">See you soon!</p>
       <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="100">
     </div>
   </div>
@@ -179,15 +178,9 @@ permalink: /valentine/
 <script>
   function startSequence() {
     const env = document.getElementById('envelope');
-    
-    // 1. Flip flap & reveal card opacity
     env.classList.add('open-flap');
-    
-    // 2. Pull out
     setTimeout(() => {
       env.classList.add('pull-out');
-      
-      // 3. Center
       setTimeout(() => {
         env.classList.remove('pull-out');
         env.classList.add('centered');
@@ -197,7 +190,7 @@ permalink: /valentine/
 
   function moveButton() {
     const btn = document.getElementById('noButton');
-    const x = Math.random() * 80 - 40;
+    const x = Math.random() * 100 - 50;
     const y = Math.random() * 60 - 30;
     btn.style.transform = `translate(${x}px, ${y}px)`;
   }
@@ -205,7 +198,7 @@ permalink: /valentine/
   function celebrate() {
     document.getElementById('question-section').style.display = 'none';
     document.getElementById('success-section').style.display = 'block';
-    for(let i=0; i<30; i++) setTimeout(createHeart, i * 50);
+    for(let i=0; i<40; i++) setTimeout(createHeart, i * 50);
   }
 
   function createHeart() {
@@ -218,6 +211,5 @@ permalink: /valentine/
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
   }
-
-  setInterval(createHeart, 1000);
+  setInterval(createHeart, 1500);
 </script>
