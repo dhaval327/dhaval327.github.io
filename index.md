@@ -11,9 +11,9 @@ permalink: /valentine/
     --primary-pink: #ffafcc;
     --dark-pink: #ff5c8a;
     --soft-white: #fff0f3;
-    --envelope-color: #f08080;
-    --envelope-flap: #cd5c5c;
-    --pocket-color: #f29090;
+    --envelope-body: #f08080;   /* Light Coral */
+    --envelope-flap: #cd5c5c;   /* Indian Red */
+    --pocket-color: #f29090;    /* Slightly lighter than body */
   }
 
   .site-header, .site-footer { display: none !important; }
@@ -27,40 +27,55 @@ permalink: /valentine/
     justify-content: center;
     font-family: 'Quicksand', sans-serif;
     overflow: hidden;
-    perspective: 2000px;
+    perspective: 2500px;
   }
 
-  /* Envelope Assembly - Scaled up an additional 10% (~440px) */
+  /* Envelope Assembly - 484px (Another 10% larger) */
   .envelope-wrapper {
     position: relative;
-    width: 440px;
-    height: 286px;
-    background-color: var(--envelope-color);
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    width: 484px;
+    height: 315px;
     z-index: 1;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
   }
 
+  /* The Back Panel - Ensures the "shoulders" match the body color */
+  .envelope-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--envelope-body);
+    border-radius: 12px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  /* The Flap */
   .flap {
     position: absolute;
     top: 0;
     left: 0;
     width: 0;
     height: 0;
-    border-left: 220px solid transparent;
-    border-right: 220px solid transparent;
-    border-top: 155px solid var(--envelope-flap);
+    border-left: 242px solid transparent;
+    border-right: 242px solid transparent;
+    border-top: 170px solid var(--envelope-flap);
     transform-origin: top;
     transition: transform 0.8s ease-in-out, z-index 0.1s 0.8s;
     z-index: 5;
     filter: drop-shadow(0 5px 5px rgba(0,0,0,0.15));
   }
 
+  /* Pulse Hover Animation for Open Button */
+  @keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    50% { transform: scale(1.1); box-shadow: 0 8px 25px rgba(217, 4, 41, 0.4); }
+    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+  }
+
   #open-button {
     position: absolute;
-    top: 110px;
-    left: 185px;
+    top: 130px;
+    left: 207px;
     width: 70px;
     height: 70px;
     background: radial-gradient(circle, #ff4d6d 0%, #d90429 100%);
@@ -73,35 +88,41 @@ permalink: /valentine/
     cursor: pointer;
     z-index: 6;
     border: 3px solid #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: 0.3s;
     font-size: 0.8rem;
+    animation: pulse 2s infinite ease-in-out;
+    transition: 0.3s;
+  }
+  #open-button:hover {
+    animation: none;
+    transform: scale(1.15) rotate(10deg);
+    background: #d90429;
   }
 
   .envelope-label {
     position: absolute;
-    bottom: 35px;
-    left: 45px;
+    bottom: 40px;
+    left: 50px;
     font-family: 'Great Vibes', cursive;
-    font-size: 2.8rem;
+    font-size: 3.2rem;
     color: rgba(255, 255, 255, 0.95);
     z-index: 4;
     pointer-events: none;
     transform: rotate(-5deg);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
   }
 
-  /* Realistic Card with Stationery Texture */
+  /* Card Styles */
   #valentine-container {
     position: absolute;
-    top: 40px; 
-    left: 40px; 
+    top: 50px; 
+    left: 42px; 
     background: #fff;
-    background-image: radial-gradient(#f0f0f0 1px, transparent 0);
-    background-size: 20px 20px;
-    padding: 1.5rem;
-    border-radius: 5px;
-    width: 360px;
-    height: 230px;
+    background-image: radial-gradient(#f0f0f0 1.5px, transparent 0);
+    background-size: 24px 24px;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 400px;
+    height: 250px;
     text-align: center;
     z-index: 2;
     box-sizing: border-box;
@@ -109,88 +130,54 @@ permalink: /valentine/
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #ddd;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
     opacity: 0;
     visibility: hidden;
     transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
   }
 
-  /* Photo Space */
   .photo-frame {
-    width: 100px;
-    height: 80px;
-    border: 3px solid #fff;
-    outline: 1px solid #eee;
+    width: 120px;
+    height: 100px;
+    border: 4px solid #fff;
     background: #fafafa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    margin-bottom: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
   .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* Elegant Font for Question */
   h1.question-text { 
     font-family: 'Dancing Script', cursive; 
     color: var(--dark-pink); 
-    font-size: 1.6rem; 
-    margin: 0;
+    font-size: 1.8rem; 
+    margin: 10px 0;
   }
 
-  /* Cartoon Style Checkbox Buttons */
-  .options-container {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 10px;
-    position: relative;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .check-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #444;
-  }
-
-  .box {
-    width: 22px;
-    height: 22px;
-    border: 2px solid #555;
-    background: white;
-    position: relative;
-    display: inline-block;
-  }
+  /* Checkbox Styles */
+  .options-container { display: flex; gap: 40px; margin-bottom: 15px; position: relative; width: 100%; justify-content: center; }
+  .check-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; color: #444; font-size: 1.1rem; }
+  .box { width: 26px; height: 26px; border: 2px solid #555; background: white; position: relative; }
 
   #no-wrapper { position: absolute; left: 60%; transition: 0.1s ease; }
 
-  /* Sequence Actions */
+  /* Animation States */
   .open-flap .flap { transform: rotateX(180deg); z-index: 0; }
   .open-flap #valentine-container { opacity: 1; visibility: visible; }
-  .open-flap #open-button { opacity: 0; pointer-events: none; }
+  .open-flap #open-button { display: none; }
   .open-flap .envelope-label { opacity: 0; transition: opacity 0.5s; }
-
-  .pull-out #valentine-container { transform: translateY(-220px); }
-
+  .pull-out #valentine-container { transform: translateY(-260px); }
   .centered #valentine-container {
     z-index: 10;
-    transform: translateY(40px) scale(1.9);
-    box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+    transform: translateY(60px) scale(1.6);
+    box-shadow: 0 50px 120px rgba(0,0,0,0.35);
   }
 
-  /* Front Pocket */
   .envelope-front {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 440px;
-    height: 286px;
+    width: 484px;
+    height: 315px;
     background: linear-gradient(to top, var(--pocket-color) 60%, #f7a3a3 100%);
     clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%, 0 40%, 50% 85%, 0 40%);
     z-index: 3;
@@ -204,6 +191,7 @@ permalink: /valentine/
 </style>
 
 <div class="envelope-wrapper" id="envelope">
+  <div class="envelope-back"></div>
   <div class="flap"></div>
   <div class="envelope-label">To Linh</div>
   <div id="open-button" onclick="startSequence()">Open</div>
@@ -232,9 +220,9 @@ permalink: /valentine/
     </div>
 
     <div id="success-section">
-        <h1 style="font-family: 'Dancing Script', cursive; color: var(--dark-pink); font-size: 2rem;">YAY! 🥰</h1>
-        <p style="font-weight: bold; color: #555;">Check yes! See you soon, Linh!</p>
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="100">
+        <h1 style="font-family: 'Dancing Script', cursive; color: var(--dark-pink); font-size: 2.2rem; margin:0;">YAY! 🥰</h1>
+        <p style="font-weight: bold; color: #555; margin: 10px 0;">See you soon, Linh!</p>
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1ZzR2cnR5ZzR2cnR5ZzR2cnR5/26FLdmIp6wJr91JAI/giphy.gif" width="120">
     </div>
   </div>
 
@@ -256,21 +244,22 @@ permalink: /valentine/
 
   function moveNo() {
     const btn = document.getElementById('no-wrapper');
-    const x = Math.random() * 160 - 80;
-    const y = Math.random() * 80 - 40;
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 100 - 50;
     btn.style.transform = `translate(${x}px, ${y}px)`;
   }
 
   function celebrate() {
-    // Fill the Yes box
-    document.getElementById('yesBox').style.background = '#4caf50';
-    document.getElementById('yesBox').innerHTML = '<span style="color:white; position:absolute; top:-2px; left:3px;">✓</span>';
+    const box = document.getElementById('yesBox');
+    box.style.background = '#4caf50';
+    box.style.borderColor = '#4caf50';
+    box.innerHTML = '<span style="color:white; position:absolute; top:-3px; left:4px; font-size:1.2rem;">✓</span>';
     
     setTimeout(() => {
         document.getElementById('question-section').style.display = 'none';
         document.getElementById('success-section').style.display = 'block';
-        for(let i=0; i<50; i++) setTimeout(createHeart, i * 50);
-    }, 400);
+        for(let i=0; i<60; i++) setTimeout(createHeart, i * 40);
+    }, 500);
   }
 
   function createHeart() {
@@ -279,9 +268,8 @@ permalink: /valentine/
     heart.innerHTML = '❤️';
     heart.style.left = Math.random() * 100 + 'vw';
     heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+    heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
   }
-  setInterval(createHeart, 1500);
 </script>
