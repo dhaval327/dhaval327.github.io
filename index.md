@@ -180,8 +180,9 @@ permalink: /valentine/
   h1.question-text { 
     font-family: 'Dancing Script', cursive; 
     color: var(--wax-seal); 
-    font-size: 1.8rem;
-    margin: 5px 0;
+    font-size: 1.6rem; /* Slightly reduced from 1.8rem */
+    margin: 2px 0;    /* Tightened from 5px to 2px */
+    line-height: 1.2;
   }
 
   .options-container { 
@@ -258,9 +259,9 @@ permalink: /valentine/
   <div id="valentine-container">
     <div id="question-section" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:space-between; align-items:center;">
       <div class="photo-frame">
-        <img src="image.png" alt="Linh" style="width:100%; height:100%; object-fit:cover;">
+        <img src="{{ '/image.png' | relative_url }}" alt="Linh" style="width:100%; height:100%; object-fit:cover;">
       </div>
-      <h1 class="question-text">Will you be my Valentine?</h1>
+      <h1 class="question-text">Linh, will you be my Valentine?</h1>
       
       <div class="options-container">
         <div class="check-option" onclick="celebrate()">
